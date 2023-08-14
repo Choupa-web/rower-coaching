@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppComponent } from './app.component';
-import {RouterOutlet} from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
-import {RunTrainingComponent} from './components/trainings/run-training/run-training.component';
-import {MatButtonModule} from '@angular/material/button';
+import { RunTrainingComponent } from './components/trainings/run-training/run-training.component';
+import { MatButtonModule } from '@angular/material/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -13,7 +12,7 @@ import {MatButtonModule} from '@angular/material/button';
   ],
   imports: [
     BrowserModule,
-    RouterOutlet,
+    BrowserAnimationsModule,
     AppRoutingModule,
     MatButtonModule
   ],
