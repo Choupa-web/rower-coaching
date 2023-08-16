@@ -1,21 +1,19 @@
-import {Component, DestroyRef, OnInit, inject} from '@angular/core';
-import {IStage, ITraining} from '../../../models/training.model';
-import {BehaviorSubject, take, timer} from 'rxjs';
-import {RunTraining} from '../../../models/training-iterator.model';
+import {Component} from '@angular/core';
+import {IDuration, IStage, ITraining} from '../../../models/training.model';
+import {BehaviorSubject, concatMap, forkJoin, from, interval, take, takeUntil, tap, timer} from 'rxjs';
 
 @Component({
   selector: 'app-run-training',
   templateUrl: './run-training.component.html',
   styleUrls: ['./run-training.component.scss']
 })
-export class RunTrainingComponent implements OnInit {
-  private destroyRef = inject(DestroyRef);
+export class RunTrainingComponent {
   rowerTraining: ITraining | undefined;
   currentStage: IStage | undefined;
-  trainingIterator$: BehaviorSubject<IStage | undefined> = new BehaviorSubject<IStage | undefined>(undefined);
-  onGoingTraining: RunTraining<IStage> | undefined;
+  minutes$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  seconds$ : BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
-  ngOnInit() {
+  constructor() {
     this.rowerTraining = {
       label: "Perte de poids",
       stages: [
@@ -31,38 +29,53 @@ export class RunTrainingComponent implements OnInit {
         }
       ]
     };
-    /*this.trainingIterator$.subscribe({
-      next: onGoingStage => {
-        console.log("onGoingStage: ",onGoingStage);
-        if(onGoingStage) {
-          this.currentStage = onGoingStage;
-          if (this.onGoingTraining?.hasNext()) {
-            this.trainingIterator$.next(this.onGoingTraining?.next());
-          }
-        }
-      }
-    });*/
-    this.onGoingTraining = new RunTraining<IStage>(this.rowerTraining.stages);
-   
+  }
 
-    do {
-      this.currentStage = this.onGoingTraining.item;
-      const delay = 60/this.currentStage.cadence*1000;
-      console.log('delay', delay);
-      timer(0,delay).pipe(
-        take(60/this.currentStage.cadence)
-        ).subscribe({
-          next: x => {
-            console.log("x: ",this.currentStage?.cadence, x);
-          }
-        });
-        this.onGoingTraining.next();
+  /**
+   * Provide minutes and seconds minus 1 second
+   * @param minutes - current minutes
+   * @param seconds - current seconds
+   */
+  getElaspedTime(minutes: number, seconds: number): IDuration {
+    let min: number;
+    let sec: number;
+    if(seconds > 0) {
+      sec = seconds-1;
+      min= minutes;
+    }
+    else {
+      sec= 59;
+      min = minutes > 1 ? minutes-1 : 0;
+    }
+    return { minutes: min, seconds: sec };
+  }
 
-
-    } while(!this.onGoingTraining.end)
-  
-    //this.trainingIterator$.next(this.onGoingTraining.first());
-
-
+  /**
+   * Start rower training
+   */
+  startTraining(): void {
+    if(this.rowerTraining && this.rowerTraining.stages.length > 0) {
+      from(this.rowerTraining.stages).pipe(
+        concatMap(stage => {
+          this.currentStage = stage;
+          this.minutes$.next(stage.duration.minutes);
+          this.seconds$.next(stage.duration.seconds);
+          const stageDurationInMs = (stage.duration.minutes*60*1000) + (stage.duration.seconds*1000);
+          const cadenceInMs = 60 / stage.cadence * 1000;
+          const count$ = timer(stageDurationInMs).pipe(take(1));
+          return forkJoin([
+            timer(0, cadenceInMs).pipe(takeUntil(count$)),
+            interval(1000).pipe(
+              take(stageDurationInMs/1000),
+              tap(() => {
+                const elapsedTime: IDuration = this.getElaspedTime(this.minutes$.value, this.seconds$.value);
+                this.seconds$.next(elapsedTime.seconds);
+                this.minutes$.next(elapsedTime.minutes);
+              })
+            )
+          ])
+        })
+      ).subscribe();
+    }
   }
 }
