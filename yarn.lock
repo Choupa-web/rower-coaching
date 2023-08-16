@@ -2302,6 +2302,13 @@
     "@material/theme" "15.0.0-canary.bc9ae6c9c.0"
     tslib "^2.1.0"
 
+"@ngbracket/ngx-layout@^16.0.0":
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/@ngbracket/ngx-layout/-/ngx-layout-16.0.0.tgz#3fa8788d647fc35490e0126ecdff9e3ef153672f"
+  integrity sha512-tfN7M4LdquU8kWp7ejW+oQaydE/yaqBxmqfXq2FIVtWPcPvreahRjDyeQCZrGx0CQb7YojH1pPZ9QknuyZe1bg==
+  dependencies:
+    tslib "^2.5.0"
+
 "@ngtools/webpack@16.2.0":
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-16.2.0.tgz#b3c2b2668faac35bbcc6c81a4bc016347d141349"
@@ -6920,7 +6927,7 @@ tslib@2.3.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
   integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
 
-tslib@2.6.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0:
+tslib@2.6.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.5.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.1.tgz#fd8c9a0ff42590b25703c0acb3de3d3f4ede0410"
   integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==

@@ -1,20 +1,29 @@
-import {Component} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {IDuration, IStage, ITraining} from '../../../models/training.model';
 import {BehaviorSubject, concatMap, forkJoin, from, interval, take, takeUntil, tap, timer} from 'rxjs';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {FormControl} from '@angular/forms';
+import { ButtonText } from 'src/app/enums/buttons.enum';
 
 @Component({
   selector: 'app-run-training',
   templateUrl: './run-training.component.html',
   styleUrls: ['./run-training.component.scss']
 })
-export class RunTrainingComponent {
-  rowerTraining: ITraining | undefined;
+export class RunTrainingComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  rowerTrainings: Array<ITraining>;
   currentStage: IStage | undefined;
+  currentTraining: ITraining | undefined;
   minutes$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   seconds$ : BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  trainingCtrl: FormControl<number>;
+  isTrainingStarted = false;
+  startTextButton = ButtonText.START;
+  stopTextButton = ButtonText.STOP;
 
   constructor() {
-    this.rowerTraining = {
+    this.rowerTrainings = [{
       label: "Perte de poids",
       stages: [
         {
@@ -24,11 +33,23 @@ export class RunTrainingComponent {
         },
         {
           duration: {minutes: 0, seconds: 30},
-          cadence: 28,
+          cadence: 38,
           order: 2
         }
       ]
-    };
+    }];
+    this.trainingCtrl = new FormControl<number>(0) as FormControl<number>;
+  }
+
+  ngOnInit() {
+    this.currentTraining = this.rowerTrainings[0];  
+    this.trainingCtrl.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: selectedTraining => {
+        this.currentTraining = this.rowerTrainings ? this.rowerTrainings[selectedTraining] : undefined;
+      }
+    });
   }
 
   /**
@@ -54,8 +75,10 @@ export class RunTrainingComponent {
    * Start rower training
    */
   startTraining(): void {
-    if(this.rowerTraining && this.rowerTraining.stages.length > 0) {
-      from(this.rowerTraining.stages).pipe(
+    if(this.currentTraining && this.currentTraining.stages.length > 0) {
+      this.isTrainingStarted = true;
+      from(this.currentTraining.stages).pipe(
+        takeUntilDestroyed(this.destroyRef),
         concatMap(stage => {
           this.currentStage = stage;
           this.minutes$.next(stage.duration.minutes);
@@ -64,7 +87,7 @@ export class RunTrainingComponent {
           const cadenceInMs = 60 / stage.cadence * 1000;
           const count$ = timer(stageDurationInMs).pipe(take(1));
           return forkJoin([
-            timer(0, cadenceInMs).pipe(takeUntil(count$)),
+            timer(0, cadenceInMs).pipe(takeUntil(count$), tap(() => console.log("bip"))),
             interval(1000).pipe(
               take(stageDurationInMs/1000),
               tap(() => {
@@ -75,7 +98,11 @@ export class RunTrainingComponent {
             )
           ])
         })
-      ).subscribe();
+      ).subscribe({
+        complete: () => {
+          this.isTrainingStarted = false;
+        }
+      });
     }
   }
 }
