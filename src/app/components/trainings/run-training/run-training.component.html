@@ -1,1 +1,6 @@
-<p>run-training works!</p>
+<button mat-raised-button (click)="startTraining()">Start</button>
+<section id="training-info">
+  <h1>{{ rowerTraining?.label }}</h1>
+  <div> Durée: {{ minutes$ | async }} mn {{ seconds$ | async }} sec</div>
+  <div> Cadence: {{ currentStage?.cadence }}</div>
+</section>
