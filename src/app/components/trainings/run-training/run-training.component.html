@@ -1,6 +1,26 @@
-<button mat-raised-button (click)="startTraining()">Start</button>
-<section id="training-info">
-  <h1>{{ rowerTraining?.label }}</h1>
-  <div> Durée: {{ minutes$ | async }} mn {{ seconds$ | async }} sec</div>
-  <div> Cadence: {{ currentStage?.cadence }}</div>
-</section>
+<div  id="rower-container">
+<div fxLayout="column" fxLayoutAlign="space-around stretch" fxLayoutGap="20px">
+  <div fxLayout="column" fxLayoutAlign="space-around stretch">
+    <mat-form-field>
+      <mat-label>Entrainement</mat-label>
+      <mat-select [formControl]="trainingCtrl">
+        <mat-option *ngFor="let training of rowerTrainings; let index = index" [value]="index">
+          {{training?.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+  <button *ngIf="!isTrainingStarted" mat-raised-button color="accent" (click)="startTraining()">{{ startTextButton}}</button>
+  <button *ngIf="isTrainingStarted" mat-raised-button color="primary">{{stopTextButton}}</button>
+
+  <section id="training-info" *ngIf="currentStage" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="40px">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+         <mat-chip fxFlex="4">{{currentStage.order}}/{{currentTraining?.stages?.length}}</mat-chip>
+         <div id="duration" fxFlex="20">{{ minutes$ | async }} mn {{ seconds$ | async }} sec</div>
+    </div>
+    <div> Cadence: {{ currentStage.cadence }}</div>
+  </section>
+</div>
+</div>
+
