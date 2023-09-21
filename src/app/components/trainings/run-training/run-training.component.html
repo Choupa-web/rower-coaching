@@ -9,17 +9,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-  
+
     </div>
     <button *ngIf="!isTrainingStarted" mat-raised-button color="accent" (click)="startTraining()">{{ startTextButton}}</button>
     <button *ngIf="isTrainingStarted" mat-raised-button color="primary">{{stopTextButton}}</button>
-  
-    <section id="training-info" *ngIf="currentStage" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="40px">
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-           <mat-chip fxFlex="4">{{currentStage.order}}/{{currentTraining?.stages?.length}}</mat-chip>
-           <div id="duration" fxFlex="20">{{ minutes$ | async }} mn {{ seconds$ | async }} sec</div>
-      </div>
-      <div> Cadence: {{ currentStage.cadence }}</div>
-    </section>
+
+    <app-step id="current-step" *ngIf="currentTraining && currentStage" [stage]="currentStage" [stages]="currentTraining.stages.length" [minutes$]="minutes$" [seconds$]="seconds$"></app-step>
+
   </div>
-  </div>
+</div>
