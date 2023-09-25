@@ -1,0 +1,10 @@
+<section id="training-info" *ngIf="stage" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div><mat-chip>{{stage.order}}/{{stages}}</mat-chip></div>
+    <div id="duration" class="elaspeTime">{{ minutes$ | async }} mn {{ seconds$ | async }} sec</div>
+  </div>
+  <div id="cadence" fxLayout="column" fxLayoutGap="15px">
+    <span>Cadence</span>
+    <span>{{ stage.cadence }}</span>
+  </div>
+</section>

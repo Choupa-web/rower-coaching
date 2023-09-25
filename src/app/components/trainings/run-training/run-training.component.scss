@@ -1,32 +1,12 @@
 #rower-container {
     padding: 2% 10%;
   }
-  
-  #training-info {
-    background-color: #575757;
-    color: white;
-    border: 1px solid #3D3D3D;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    &>div {
-      font-size: 18px;
-    }
-  }
-  #duration {
-    text-align: end;
-  }
-  
+
+
+
   h1 {
     margin: 0;
     text-align: center;
   }
-  
-  .mat-mdc-standard-chip {
-    background-color: #7EBDC3 !important;
-  }
-  
-  ::ng-deep.mat-mdc-standard-chip:not(.mdc-evolution-chip--disabled) .mdc-evolution-chip__text-label {
-    color: black !important;
-    font-weight: bold;
-  }
+
+
