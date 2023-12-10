@@ -2430,10 +2430,10 @@
     "@material/theme" "15.0.0-canary.bc9ae6c9c.0"
     tslib "^2.1.0"
 
-"@ngbracket/ngx-layout@16.1.3":
-  version "16.1.3"
-  resolved "https://registry.yarnpkg.com/@ngbracket/ngx-layout/-/ngx-layout-16.1.3.tgz#c2115ff42059463f6cfbb5d4b66f6d1dc03a80a0"
-  integrity sha512-N24KX2BIBYXbCfLyr8Q/wXHh5x9w8yGn2G5GLo99inOJ2BtBNu3AvBdvz1oYIsuLEdqgWZIqt0JqlBeIm4u/iQ==
+"@ngbracket/ngx-layout@17.0.0":
+  version "17.0.0"
+  resolved "https://registry.yarnpkg.com/@ngbracket/ngx-layout/-/ngx-layout-17.0.0.tgz#79b932da05fde5ca9141ba49230e06b912cfa05e"
+  integrity sha512-LqGLiTtI71nBmd8nTm3oxUfxB9hrjLqIO+61JMmJqH1ywDed+t1B49A4tsbpxejdD2Y6z1bPvKBEja7ifbmyjA==
   dependencies:
     tslib "^2.5.0"
 
