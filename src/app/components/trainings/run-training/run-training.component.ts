@@ -4,6 +4,7 @@ import {BehaviorSubject, concatMap, forkJoin, from, interval, take, takeUntil, t
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl} from '@angular/forms';
 import { ButtonText } from 'src/app/enums/buttons.enum';
+import { abdosTraining, looseWeightTraining } from 'src/app/models/trainings.model';
 
 @Component({
   selector: 'app-run-training',
@@ -21,24 +22,13 @@ export class RunTrainingComponent implements OnInit {
   isTrainingStarted = false;
   startTextButton = ButtonText.START;
   stopTextButton = ButtonText.STOP;
+  audioFile: HTMLAudioElement;
 
   constructor() {
-    this.rowerTrainings = [{
-      label: "Perte de poids",
-      stages: [
-        {
-          duration: {minutes: 1, seconds: 30},
-          cadence: 16,
-          order: 1
-        },
-        {
-          duration: {minutes: 0, seconds: 30},
-          cadence: 38,
-          order: 2
-        }
-      ]
-    }];
-    this.trainingCtrl = new FormControl<number>(0) as FormControl<number>;
+    this.rowerTrainings = [looseWeightTraining, abdosTraining];
+    this.trainingCtrl = new FormControl<number>(0) as FormControl<number>
+    this.audioFile = new Audio("http://universal-soundbank.com/sounds/2042.mp3");
+
   }
 
   /**
@@ -87,7 +77,7 @@ export class RunTrainingComponent implements OnInit {
           const cadenceInMs = 60 / stage.cadence * 1000;
           const count$ = timer(stageDurationInMs).pipe(take(1));
           return forkJoin([
-            timer(0, cadenceInMs).pipe(takeUntil(count$), tap(() => console.log("bip"))),
+            timer(0, cadenceInMs).pipe(takeUntil(count$), tap(() => this.playBip())),
             interval(1000).pipe(
               take(stageDurationInMs/1000),
               tap(() => {
@@ -104,5 +94,10 @@ export class RunTrainingComponent implements OnInit {
         }
       });
     }
+  }
+
+  playBip(): void {
+    this.audioFile.load();
+    this.audioFile.play();
   }
 }
