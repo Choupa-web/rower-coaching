@@ -1,0 +1,11 @@
+<section class="training-section" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="20px">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div><mat-chip>{{stage.order+1}}</mat-chip></div>
+    <div id="cadence" fxLayout="column" fxLayoutGap="5px">
+      <span>Cadence</span>
+      <span>{{ stage.cadence }}</span>
+    </div>
+    <div id="duration" class="elapsedTime">{{ stage.duration.minutes }} mn {{ stage.duration.seconds }} sec</div>
+
+  </div>
+</section>

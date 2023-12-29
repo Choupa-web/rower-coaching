@@ -31,6 +31,17 @@ export class RunTrainingComponent implements OnInit {
 
   }
 
+  ngOnInit() {
+    this.currentTraining = this.rowerTrainings[0];  
+    this.trainingCtrl.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: selectedTraining => {
+        this.currentTraining = this.rowerTrainings ? this.rowerTrainings[selectedTraining] : undefined;
+      }
+    });
+  }
+
   /**
    * Provide minutes and seconds minus 1 second
    * @param minutes - current minutes
@@ -48,17 +59,6 @@ export class RunTrainingComponent implements OnInit {
       min = minutes > 1 ? minutes-1 : 0;
     }
     return { minutes: min, seconds: sec };
-  }
-
-  ngOnInit() {
-    this.currentTraining = this.rowerTrainings[0];  
-    this.trainingCtrl.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next: selectedTraining => {
-        this.currentTraining = this.rowerTrainings ? this.rowerTrainings[selectedTraining] : undefined;
-      }
-    });
   }
 
   /**

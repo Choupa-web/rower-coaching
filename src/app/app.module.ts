@@ -11,10 +11,12 @@ import {MatSelectModule} from '@angular/material/select';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatChipsModule} from '@angular/material/chips';
 import { StepComponent } from './components/trainings/step/step.component';
+import {RemainingStepsComponent} from './components/trainings/remaining-steps/remaining-steps.component';
+import {RemainingStepComponent} from './components/trainings/remaining-step/remaining-step.component';
 
 @NgModule({
   declarations: [
-    AppComponent, RunTrainingComponent, StepComponent
+    AppComponent, RunTrainingComponent, StepComponent, RemainingStepsComponent, RemainingStepComponent
   ],
   imports: [
     BrowserModule,
@@ -28,6 +30,9 @@ import { StepComponent } from './components/trainings/step/step.component';
     MatChipsModule
   ],
   providers: [],
+  exports: [
+    StepComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

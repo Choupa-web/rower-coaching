@@ -1,0 +1,5 @@
+<div id="remaining">
+  @for(step of allSteps | slice:remainingOrder; track step.id; let i = $index) {
+    <app-remaining-step [stage]="step"></app-remaining-step>
+  }
+</div>
