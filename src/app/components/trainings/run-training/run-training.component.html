@@ -9,12 +9,17 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-
     </div>
-    <button *ngIf="!isTrainingStarted" mat-raised-button color="accent" (click)="startTraining()">{{ startTextButton}}</button>
-    <button *ngIf="isTrainingStarted" mat-raised-button color="primary">{{stopTextButton}}</button>
 
-    <app-step id="current-step" *ngIf="currentTraining && currentStage" [stage]="currentStage" [stages]="currentTraining.stages.length" [minutes$]="minutes$" [seconds$]="seconds$"></app-step>
+    @if(isTrainingStarted) {
+      <button mat-raised-button color="primary" (click)="stop()">{{stopTextButton}}</button>
+      <app-step id="current-step" *ngIf="currentTraining && currentStage" [stage]="currentStage" [stages]="currentTraining.stages.length" [minutes$]="minutes$" [seconds$]="seconds$"></app-step>
+
+    } @else {
+      <button mat-raised-button color="accent" (click)="startTraining()">{{ startTextButton}}</button>
+    }
+
+
     @if(isTrainingStarted) {
       <app-remaining-steps [allSteps]="currentTraining?.stages!!" [currentOrder]="currentStage?.order!!"></app-remaining-steps>
     }
