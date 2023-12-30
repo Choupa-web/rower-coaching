@@ -7,7 +7,6 @@ import {
   from,
   interval,
   mergeMap,
-  of,
   Subject,
   take,
   takeUntil,
@@ -36,13 +35,12 @@ export class RunTrainingComponent implements OnInit {
   startTextButton = ButtonText.START;
   stopTextButton = ButtonText.STOP;
   audioFile: HTMLAudioElement;
-  clicOnStop: Subject<boolean> = new Subject<boolean>();
+clicOnStop: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     this.rowerTrainings = [looseWeightTraining, abdosTraining];
     this.trainingCtrl = new FormControl<number>(0) as FormControl<number>
     this.audioFile = new Audio("http://universal-soundbank.com/sounds/2042.mp3");
-    this.clicOnStop.next(false);
   }
 
   ngOnInit() {
@@ -81,25 +79,22 @@ export class RunTrainingComponent implements OnInit {
   startTraining(): void {
     if(this.currentTraining && this.currentTraining.stages.length > 0) {
       this.isTrainingStarted = true;
+      this.clicOnStop = new Subject<boolean>();
       from(this.currentTraining.stages).pipe(
-        takeUntil(this.clicOnStop),
         takeUntilDestroyed(this.destroyRef),
-        mergeMap(stage => {
+        concatMap(stage => {
           this.currentStage = stage;
           this.minutes$.next(stage.duration.minutes);
           this.seconds$.next(stage.duration.seconds);
           const stageDurationInMs = (stage.duration.minutes*60*1000) + (stage.duration.seconds*1000);
           const cadenceInMs = 60 / stage.cadence * 1000;
-          const count$ = timer(stageDurationInMs).pipe(
-            takeUntil(this.clicOnStop),
-            take(1));
+          const count$ = timer(stageDurationInMs).pipe(take(1));
           return forkJoin([
             timer(0, cadenceInMs).pipe(
-              takeUntil(this.clicOnStop),
               takeUntil(count$),
-              tap(() => this.playBip())),
+              tap(() => this.playBip()
+              )),
             interval(1000).pipe(
-              takeUntil(this.clicOnStop),
               take(stageDurationInMs/1000),
               tap(() => {
                 const elapsedTime: IDuration = this.getElapsedTime(this.minutes$.value, this.seconds$.value);
@@ -108,11 +103,9 @@ export class RunTrainingComponent implements OnInit {
               })
             )
           ])
-        })
+        }),
+       takeUntil(this.clicOnStop),
       ).subscribe({
-        next: () => {
-            console.log("next");
-        },
         complete: () => {
           this.isTrainingStarted = false;
         }
@@ -126,7 +119,6 @@ export class RunTrainingComponent implements OnInit {
   }
 
   stop(): void {
-    console.log("stop");
     this.clicOnStop.next(true);
     this.clicOnStop.complete();
   }
