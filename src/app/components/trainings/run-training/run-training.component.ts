@@ -1,6 +1,18 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {IDuration, IStage, ITraining} from '../../../models/training.model';
-import {BehaviorSubject, concatMap, forkJoin, from, interval, take, takeUntil, tap, timer} from 'rxjs';
+import {
+  BehaviorSubject,
+  concatMap,
+  forkJoin,
+  from,
+  interval,
+  mergeMap,
+  Subject,
+  take,
+  takeUntil,
+  tap,
+  timer
+} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl} from '@angular/forms';
 import { ButtonText } from 'src/app/enums/buttons.enum';
@@ -23,16 +35,16 @@ export class RunTrainingComponent implements OnInit {
   startTextButton = ButtonText.START;
   stopTextButton = ButtonText.STOP;
   audioFile: HTMLAudioElement;
+clicOnStop: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
     this.rowerTrainings = [looseWeightTraining, abdosTraining];
     this.trainingCtrl = new FormControl<number>(0) as FormControl<number>
     this.audioFile = new Audio("http://universal-soundbank.com/sounds/2042.mp3");
-
   }
 
   ngOnInit() {
-    this.currentTraining = this.rowerTrainings[0];  
+    this.currentTraining = this.rowerTrainings[0];
     this.trainingCtrl.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
@@ -47,7 +59,7 @@ export class RunTrainingComponent implements OnInit {
    * @param minutes - current minutes
    * @param seconds - current seconds
    */
-  getElaspedTime(minutes: number, seconds: number): IDuration {
+  getElapsedTime(minutes: number, seconds: number): IDuration {
     let min: number;
     let sec: number;
     if(seconds > 0) {
@@ -67,6 +79,7 @@ export class RunTrainingComponent implements OnInit {
   startTraining(): void {
     if(this.currentTraining && this.currentTraining.stages.length > 0) {
       this.isTrainingStarted = true;
+      this.clicOnStop = new Subject<boolean>();
       from(this.currentTraining.stages).pipe(
         takeUntilDestroyed(this.destroyRef),
         concatMap(stage => {
@@ -77,17 +90,21 @@ export class RunTrainingComponent implements OnInit {
           const cadenceInMs = 60 / stage.cadence * 1000;
           const count$ = timer(stageDurationInMs).pipe(take(1));
           return forkJoin([
-            timer(0, cadenceInMs).pipe(takeUntil(count$), tap(() => this.playBip())),
+            timer(0, cadenceInMs).pipe(
+              takeUntil(count$),
+              tap(() => this.playBip()
+              )),
             interval(1000).pipe(
               take(stageDurationInMs/1000),
               tap(() => {
-                const elapsedTime: IDuration = this.getElaspedTime(this.minutes$.value, this.seconds$.value);
+                const elapsedTime: IDuration = this.getElapsedTime(this.minutes$.value, this.seconds$.value);
                 this.seconds$.next(elapsedTime.seconds);
                 this.minutes$.next(elapsedTime.minutes);
               })
             )
           ])
-        })
+        }),
+       takeUntil(this.clicOnStop),
       ).subscribe({
         complete: () => {
           this.isTrainingStarted = false;
@@ -99,5 +116,10 @@ export class RunTrainingComponent implements OnInit {
   playBip(): void {
     this.audioFile.load();
     this.audioFile.play();
+  }
+
+  stop(): void {
+    this.clicOnStop.next(true);
+    this.clicOnStop.complete();
   }
 }
