@@ -16,7 +16,7 @@ import {
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormControl} from '@angular/forms';
 import { ButtonText } from 'src/app/enums/buttons.enum';
-import { abdosTraining, looseWeightTraining } from 'src/app/models/trainings.model';
+import { bruleGraissesTraining, footingEffectTraining, looseWeight1Training } from 'src/app/models/trainings.model';
 
 @Component({
   selector: 'app-run-training',
@@ -38,7 +38,7 @@ export class RunTrainingComponent implements OnInit {
 clicOnStop: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
-    this.rowerTrainings = [looseWeightTraining, abdosTraining];
+    this.rowerTrainings = [footingEffectTraining, bruleGraissesTraining, looseWeight1Training];
     this.trainingCtrl = new FormControl<number>(0) as FormControl<number>
     this.audioFile = new Audio("http://universal-soundbank.com/sounds/2042.mp3");
   }
@@ -48,7 +48,7 @@ clicOnStop: Subject<boolean> = new Subject<boolean>();
     this.trainingCtrl.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: selectedTraining => {
+      next: (selectedTraining: number) => {
         this.currentTraining = this.rowerTrainings ? this.rowerTrainings[selectedTraining] : undefined;
       }
     });
@@ -82,7 +82,7 @@ clicOnStop: Subject<boolean> = new Subject<boolean>();
       this.clicOnStop = new Subject<boolean>();
       from(this.currentTraining.stages).pipe(
         takeUntilDestroyed(this.destroyRef),
-        concatMap(stage => {
+        concatMap((stage: IStage) => {
           this.currentStage = stage;
           this.minutes$.next(stage.duration.minutes);
           this.seconds$.next(stage.duration.seconds);
