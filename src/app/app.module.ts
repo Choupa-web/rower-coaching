@@ -12,7 +12,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { StepComponent } from './components/trainings/step/step.component';
 import {RemainingStepsComponent} from './components/trainings/remaining-steps/remaining-steps.component';
 import {RemainingStepComponent} from './components/trainings/remaining-step/remaining-step.component';
-import { environment } from './environments/environment';
+import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
