@@ -1,9 +1,0 @@
-name: Deploy to Firebase Hosting on PR
-'on': pull_request
-jobs:
-  build:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-      - run: 'yarn install && yarn build:prod'
