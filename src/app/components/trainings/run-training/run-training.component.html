@@ -12,11 +12,11 @@
     </div>
 
     @if(isTrainingStarted) {
-      <button mat-raised-button color="primary" (click)="stop()">{{stopTextButton}}</button>
+      <button mat-raised-button color="accent" (click)="stop()">{{stopTextButton}}</button>
       <app-step id="current-step" *ngIf="currentTraining && currentStage" [stage]="currentStage" [stages]="currentTraining.stages.length" [minutes$]="minutes$" [seconds$]="seconds$"></app-step>
 
     } @else {
-      <button mat-raised-button color="accent" (click)="startTraining()">{{ startTextButton}}</button>
+      <button mat-raised-button color="primary" (click)="startTraining()">{{ startTextButton}}</button>
     }
 
 
