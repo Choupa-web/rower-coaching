@@ -16,10 +16,16 @@ import { RemainingStepComponent } from './components/trainings/remaining-step/re
 import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { RowerAnimateComponent } from './components/rower-animate/rower-animate.component';
 
 @NgModule({
   declarations: [
-    AppComponent, RunTrainingComponent, StepComponent, RemainingStepsComponent, RemainingStepComponent
+    AppComponent, 
+    RunTrainingComponent, 
+    StepComponent, 
+    RemainingStepsComponent, 
+    RemainingStepComponent,
+    RowerAnimateComponent
   ],
   imports: [
     BrowserModule,

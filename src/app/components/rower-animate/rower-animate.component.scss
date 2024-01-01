@@ -1,0 +1,19 @@
+#animate {
+    margin: auto;
+    margin-top: 10px;
+    &>div>div {
+        position: relative;
+        background-color: brown;
+        width: 20px;
+        height: 20px;
+        border-radius: 20px;
+        animation: leftToRight 1s infinite;
+        animation-direction: alternate;
+    }
+}
+
+@keyframes leftToRight {
+   from  { left: 0px;}
+   to  {left: 450px; }
+ 
+  }
