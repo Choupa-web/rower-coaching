@@ -1,0 +1,21 @@
+<div id="training" [formGroup]="trainingFormGroup" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="10px">
+    <mat-form-field appearance="outline">
+        <mat-label>Titre</mat-label>
+        <input matInput [formControl]="trainingFormGroup.controls['label']">
+    </mat-form-field>
+    <div>
+        <button mat-raised-button color="primary" (click)="addStep()">Ajouter une étape</button>
+    </div>
+    <div id="stepsBtns" fxLayout="column" fxLayoutAlign="center stretch" fxLayoutGap="10px">
+        @for (stepFormGroup of trainingFormGroup.controls['steps'].controls; track $index) {
+            <app-training-step [trainingStepFormGroup]="stepFormGroup"></app-training-step>
+        }
+    </div>
+    @if(isStepsAdded) {
+        <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="10px">
+            <button mat-raised-button color="accent">Annuler</button>
+            <button mat-raised-button color="primary">Sauvegarder</button>
+        </div>
+    }
+    
+</div>

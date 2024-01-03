@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {RunTrainingComponent} from './components/trainings/run-training/run-training.component';
+import { TrainingsListComponent } from './components/creation/trainings-list/trainings-list.component';
 
 const routes: Routes = [
-  { path: 'test', component: RunTrainingComponent },
+  { path: 'trainings', component: TrainingsListComponent },
+  { path: '**', component: RunTrainingComponent },
 ];
 
 
