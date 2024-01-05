@@ -20,14 +20,15 @@ import { TrainingEditComponent } from './components/creation/training-edit/train
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import { TrainingStepComponent } from './components/creation/training-step/training-step.component';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
-    AppComponent, 
-    RunTrainingComponent, 
-    StepComponent, 
-    RemainingStepsComponent, 
-    RemainingStepComponent, 
+    AppComponent,
+    RunTrainingComponent,
+    StepComponent,
+    RemainingStepsComponent,
+    RemainingStepComponent,
     TrainingsListComponent,
     TrainingEditComponent,
     TrainingStepComponent
@@ -44,7 +45,8 @@ import { TrainingStepComponent } from './components/creation/training-step/train
     MatChipsModule,
     MatInputModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    MatIconModule
   ],
   providers: [],
   exports: [],

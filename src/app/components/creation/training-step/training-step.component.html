@@ -1,3 +1,28 @@
-<div class="step" [formGroup]="trainingStepFormGroup">
-
+<div class="step" [formGroup]="trainingStepFormGroup" fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div fxFlex="100" fxLayout="row" fxLayoutAlign="end center">
+      <button mat-icon-button color="warn"><mat-icon>delete</mat-icon></button>
+    </div>
+    <div id="cadenceCtrl-{{trainingStepFormGroup.get('order').value}}" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+      <mat-label fxFlex="64px">Cadence :</mat-label>
+      <mat-form-field fxFlex="15" appearance="outline">
+        <input matInput [formControl]="trainingStepFormGroup.controls['cadence']">
+      </mat-form-field>
+      <span>rpm</span>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="1px">
+      <div id="minutesCtrl-{{trainingStepFormGroup.get('order').value}}" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <mat-label fxFlex="64px">Minutes :</mat-label>
+        <mat-form-field fxFlex="20" appearance="outline">
+          <input matInput [formControl]="trainingStepFormGroup.controls['minutes']">
+        </mat-form-field>
+        <span>mn</span>
+      </div>
+      <div id="secondesCtrl-{{trainingStepFormGroup.get('order').value}}" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start center">
+        <mat-label fxFlex="75px">Secondes :</mat-label>
+        <mat-form-field fxFlex="20" appearance="outline">
+          <input matInput [formControl]="trainingStepFormGroup.controls['secondes']">
+        </mat-form-field>
+        <span>sec</span>
+      </div>
+    </div>
 </div>
